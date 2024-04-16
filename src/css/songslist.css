@@ -1,0 +1,35 @@
+img {
+    width: 75px;
+    height: 75px;
+    margin-right: 25px;
+}
+
+.songs-list{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.songs-list-div {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 300px;
+    margin: 5px 0px;
+}
+
+.song-info {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    width: 450px;
+}
+
+.song-text{
+    width: 200px;
+}
+
+.song-name, .song-author{
+    text-align: left;
+}
