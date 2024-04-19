@@ -1,14 +1,13 @@
 import { useContext } from "react";
 import { AudioContext } from "../context/AudioContext";
 import { PlayArrow, Pause } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
-import Stack from '@mui/material/Stack';
+import { IconButton, Stack } from "@mui/material";
 import secondsToMMSS from "../utils/secondsToMMSS";
 
 const Track = (props) => {
-    const { handleToggleAudio, currentTrack, isPlaying } = useContext(AudioContext);
     const { song_id, song_name, song_author, song_image, song_duration } = props;
-    const isCurrentTrack = currentTrack && currentTrack.song_id === song_id;
+    const { handleToggleAudio, currentTrack, isPlaying } = useContext(AudioContext);
+    const isCurrentTrack = currentTrack.song_id === song_id;
     const formattedDuration = secondsToMMSS(song_duration);
 
     return (

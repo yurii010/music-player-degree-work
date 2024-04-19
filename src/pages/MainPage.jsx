@@ -5,11 +5,11 @@ import { Stack } from "@mui/material";
 import "../css/main.css";
 
 const MainPage = () => {
-    const { songsAndAuthors } = useContext(AudioContext);
+    const { songs } = useContext(AudioContext);
 
     return (
         <Stack sx={{ m: 5 }} alignItems="center" className="list">
-            {songsAndAuthors.map((track) => (
+            {songs.map((track) => (
                 <Track key={track.id} {...track} />
             ))}
         </Stack>
