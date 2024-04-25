@@ -4,29 +4,29 @@ import cors from 'cors';
 
 const app = express();
 app.use(cors())
-const db =mysql.createConnection({
-    host:'localhost',
+const db = mysql.createConnection({
+    host: 'localhost',
     user: 'root',
     password: '',
     database: 'music_player'
 })
 
-app.get ('/', (re,res)=>{
-    return res.json ('from backend side');
+app.get('/', (re, res) => {
+    return res.json('from backend side');
 })
 
-app.get ('/authors', (req,res)=>{
+app.get('/authors', (req, res) => {
     const sql = 'SELECT * FROM authors';
-    db.query(sql, (err, data)=> {
-        if(err) return res.json(err);
+    db.query(sql, (err, data) => {
+        if (err) return res.json(err);
         return res.json(data);
     })
 })
 
-app.get ('/songs', (req,res)=>{
+app.get('/songs', (req, res) => {
     const sql = 'SELECT * FROM songs';
-    db.query(sql, (err, data)=> {
-        if(err) return res.json(err);
+    db.query(sql, (err, data) => {
+        if (err) return res.json(err);
         return res.json(data);
     })
 })
@@ -40,17 +40,15 @@ app.get('/songsAndAuthors', (req, res) => {
 });
 
 
-app.get ('/albums', (req,res)=>{
+app.get('/albums', (req, res) => {
     const sql = 'SELECT * FROM albums';
-    db.query(sql, (err, data)=> {
-        if(err) return res.json(err);
+    db.query(sql, (err, data) => {
+        if (err) return res.json(err);
         return res.json(data);
     })
 })
 
-
-
-app.listen (8081, ()=>{
+app.listen(8081, () => {
     console.log('http://localhost:8081');
 })
 
