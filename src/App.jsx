@@ -1,12 +1,13 @@
-import Playbar from './components/playbar';
 import MainPage from './pages/MainPage';
+import LoginPage from './pages/LoginPage';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
-    <>
-      <MainPage />
-      <Playbar />
-    </>
+    <Routes>
+      <Route path={'/'} element={<LoginPage />}></Route>
+      <Route path={'/main'} element={<MainPage />}></Route>
+    </Routes>
   )
 }
 

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { AudioContext } from '../context/AudioContext';
 import { PlayArrow, Pause, SkipPrevious, SkipNext, VolumeUp, VolumeDown, Repeat, RepeatOne, Shuffle } from "@mui/icons-material";
-import { Stack, IconButton, Slider } from '@mui/material';
+import { Stack, IconButton, Slider, Box } from '@mui/material';
 import secondsToMMSS from '../utils/secondsToMMSS';
 import '../css/playbar.css';
 
@@ -10,7 +10,7 @@ const TimeControls = () => {
     const { song_duration } = currentTrack;
     const [currentTime, setCurrentTime] = useState(0);
     const formattedDuration = secondsToMMSS(currentTime);
-    const sliderCurrentTime = Math.round((currentTime / song_duration) * 100);
+    const sliderCurrentTime = song_duration ? Math.round((currentTime / song_duration) * 100) : 0;
     const handleChangeCurrentTime = (_, value) => {
         const time = Math.round((value / 100) * song_duration);
         setCurrentTime(time);
@@ -72,13 +72,13 @@ const Playbar = () => {
     const formattedDuration = secondsToMMSS(song_duration);
 
     return (
-        <div className='playbar-div'>
-            <Stack sx={{ m: 2 }} spacing={2} direction="row" alignItems="center" justifyContent="center">
+        <Box sx={{ position: 'fixed', bottom: 0, width: '100vh', justifyContent: 'center', marginLeft: '15%' }} className='playbar-div'>
+            <Stack sx={{ m: 2, marginLeft: '0' }} spacing={2} direction="row" alignItems="center" justifyContent="center" width='200px' height='70px'>
                 <img width='70px' src={song_image} alt={song_name} />
-                <div>
+                <Box sx={{ minWidth: '100px' }}>
                     <p>{song_name}</p>
                     <p>{song_author}</p>
-                </div>
+                </Box>
             </Stack>
             <Stack spacing={1} direction="column" justifyContent="center" alignItems="center">
                 <Stack spacing={2} direction="row" justifyContent="center" alignItems="center" width="500px">
@@ -92,14 +92,14 @@ const Playbar = () => {
                     <RepeatOne className='repeatOneIcon' sx={{ display: 'none' }} />
                 </Stack>
                 <Stack sx={{ m: 2 }} spacing={2} direction="row" justifyContent="center" alignItems="center" width="700px">
-                    <TimeControls />
+                    <TimeControls sx={{ minWidth: '300px' }} />
                     <p>{formattedDuration}</p>
                 </Stack>
             </Stack>
-            <Stack sx={{ m: 2 }} spacing={2} direction="row" justifyContent="center" alignItems="center" width="200px">
+            <Stack sx={{ m: 2, minWidth: '200px' }} spacing={2} direction="row" justifyContent="center" alignItems="center" width="200px">
                 <LoudControls />
             </Stack>
-        </div>
+        </Box>
     );
 }
 

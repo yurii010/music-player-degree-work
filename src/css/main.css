@@ -1,19 +1,38 @@
 *,
 *::after,
 *::before {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .list {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    flex: 1;
-    margin: 10px 0;
-    max-height: calc(100vh - 215px);
-    overflow: auto;
-    padding: 15px;
-    border: 1px solid #eee;
-    border-radius: 20px;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1;
+  margin: 10px 0;
+  max-height: calc(100vh - 215px);
+  overflow: auto;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 20px;
+}
+
+.users-playlist{
+  display: flex;
+  flex-direction: column;
+  gap:5px;
+  flex: 1;
+  margin: 10px 0;
+  max-height: 220px;
+  overflow: auto;
+  width: 70px;
+}
+
+.div-input {
+  padding: 20px;
+}
+
+body{
+  position: fixed;
+}

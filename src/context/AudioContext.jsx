@@ -36,8 +36,24 @@ const AudioProvider = ({ children }) => {
       }
     }
   };
-  
-  const value = { audio, songs, currentTrack, isPlaying, handleToggleAudio };
+
+  // General
+
+  const [menuItem, setMenuItem] = useState('golovna');
+
+  const onChangeMenuItem = (item) => {
+    return setMenuItem(item);
+  }
+
+  const value = {
+    audio,
+    songs,
+    currentTrack,
+    isPlaying,
+    menuItem,
+    handleToggleAudio,
+    onChangeMenuItem
+  };
 
   return (
     <AudioContext.Provider value={value}>

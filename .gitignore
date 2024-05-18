@@ -4,6 +4,7 @@ logs
 **/*.backup.*
 **/*.back.*
 
+public/images
 src/assets/
 node_modules
 bower_components
