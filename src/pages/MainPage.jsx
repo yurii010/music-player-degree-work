@@ -6,14 +6,17 @@ import TrackList from "../track/trackList";
 import { Navigate } from "react-router-dom";
 import Playbar from "../components/playbar";
 import Favorite from '../components/favorite';
+import AlbumPage from "../components/albumPage";
+import AuthorPage from "../components/authorPage";
+import UserPlaylist from '../components/userPlaylist';
 import { AudioContext } from "../context/AudioContext";
 import { useContext, useState, useEffect } from "react";
 import { useAuthContext } from '../firebase/authProvider';
+import DefaultPage from "../components/defaultPage";
 
 const MainPage = () => {
     const { menuItem } = useContext(AudioContext);
-    const [content, setContent] = useState(<TrackList />)
-
+    const [content, setContent] = useState('golovna')
     const { profile } = useAuthContext();
 
     if (!profile) {
@@ -37,7 +40,16 @@ const MainPage = () => {
                 setContent(<Search />);
                 break;
             case 'userPlaylist':
-                setContent(<Search />);
+                setContent(<UserPlaylist />);
+                break;
+            case 'album':
+                setContent(<AlbumPage />);
+                break;
+            case 'author':
+                setContent(<AuthorPage />);
+                break;
+            case 'def':
+                setContent(<DefaultPage />);
                 break;
             default:
                 setContent(<TrackList />);

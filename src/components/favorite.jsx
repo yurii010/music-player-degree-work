@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AudioContext } from "../context/AudioContext";
 import { Stack } from "@mui/material";
 import Track from "../track/track";
 
-
 const Favorite = () => {
-    const [favoriteSongs, setFavoriteSongs] = useState([]);
+    const { favoriteSongs, setFavoriteSongs } = useContext(AudioContext);
     const uid = localStorage.getItem('uid');
 
     useEffect(() => {

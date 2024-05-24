@@ -9,8 +9,8 @@ import axios from "axios";
 import TrackMenu from './trackMenu';
 
 const Track = (props) => {
-    const { song_id, song_name, song_author, song_image, song_duration } = props;
-    const { handleToggleAudio, currentTrack, isPlaying } = useContext(AudioContext);
+    const { song_id, song_name, song_author, song_image, song_duration, author_id, album_id } = props;
+    const { handleToggleAudio, currentTrack, isPlaying, findAuthorById, onChangeMenuItem } = useContext(AudioContext);
     const [isFavorite, setIsFavorite] = useState(false);
     const formattedDuration = secondsToMMSS(song_duration);
     const isCurrentTrack = currentTrack.song_id === song_id;
@@ -44,6 +44,10 @@ const Track = (props) => {
         }
     };
 
+    const handleAuthorClick = (author_id) => {
+        findAuthorById(author_id);
+        onChangeMenuItem('author');
+    };
 
     return (
         <Stack sx={{ my: 0.5 }} direction="row" justifyContent="space-between" alignItems="center" width="500px" height="70px">
@@ -57,7 +61,7 @@ const Track = (props) => {
             </Stack>
             <Stack width="150px">
                 <p>{song_name}</p>
-                <p>{song_author}</p>
+                <p style={{ cursor: 'pointer', color: 'blue' }} onClick={() => handleAuthorClick(author_id)}>{song_author}</p>
             </Stack>
             <Stack>
                 <p>{formattedDuration}</p>
@@ -74,7 +78,7 @@ const Track = (props) => {
                 )}
             </Stack>
             <Stack>
-                <TrackMenu />
+                <TrackMenu songId={song_id} albumId={album_id}/>
             </Stack>
         </Stack>
     );

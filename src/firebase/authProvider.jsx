@@ -16,7 +16,6 @@ const AuthProvider = (props) => {
   const [authErrorMessages, setAuthErrorMessages] = useState();
   const [userPhoto, setUserPhoto] = useState();
   const [userPlaylists, setUserPlaylists] = useState([]);
-
   const { myAuth, myFS } = useFirebaseContext();
 
   // hook into Firebase Authentication
@@ -193,6 +192,10 @@ const AuthProvider = (props) => {
     }
   };
 
+  const updateUserPlaylists = async (playlists) => {
+    setUserPlaylists(playlists);
+  };
+
   const value = {
     authErrorMessages,
     authLoading,
@@ -201,6 +204,7 @@ const AuthProvider = (props) => {
     userPhoto,
     userPlaylists,
     getPlaylists,
+    updateUserPlaylists,
     loadUserAvatar,
     login: loginFunction,
     logout: logoutFunction,

@@ -11,6 +11,8 @@ const TimeControls = () => {
     const [currentTime, setCurrentTime] = useState(0);
     const formattedDuration = secondsToMMSS(currentTime);
     const sliderCurrentTime = song_duration ? Math.round((currentTime / song_duration) * 100) : 0;
+    const songDuration = secondsToMMSS(song_duration);
+
     const handleChangeCurrentTime = (_, value) => {
         const time = Math.round((value / 100) * song_duration);
         setCurrentTime(time);
@@ -37,6 +39,7 @@ const TimeControls = () => {
                 value={sliderCurrentTime}
                 onChange={handleChangeCurrentTime}
             />
+            <p>{songDuration}</p>
         </>
     );
 };
@@ -65,11 +68,14 @@ const LoudControls = () => {
 };
 
 const Playbar = () => {
-
-    const { currentTrack, isPlaying, handleToggleAudio } = useContext(AudioContext);
-    const { song_id, song_name, song_author, song_image, song_duration } = currentTrack;
+    const { currentTrack, isPlaying, handleToggleAudio, findAuthorById, onChangeMenuItem } = useContext(AudioContext);
+    const { song_id, song_name, song_author, author_id, song_image } = currentTrack;
     const isCurrentTrack = currentTrack.song_id === song_id;
-    const formattedDuration = secondsToMMSS(song_duration);
+
+    const handleAuthorClick = (author_id) => {
+        findAuthorById(author_id);
+        onChangeMenuItem('author');
+    };
 
     return (
         <Box sx={{ position: 'fixed', bottom: 0, width: '100vh', justifyContent: 'center', marginLeft: '15%' }} className='playbar-div'>
@@ -77,7 +83,7 @@ const Playbar = () => {
                 <img width='70px' src={song_image} alt={song_name} />
                 <Box sx={{ minWidth: '100px' }}>
                     <p>{song_name}</p>
-                    <p>{song_author}</p>
+                    <p style={{ cursor: 'pointer', color: 'blue' }} onClick={() => handleAuthorClick(author_id)}>{song_author}</p>
                 </Box>
             </Stack>
             <Stack spacing={1} direction="column" justifyContent="center" alignItems="center">
@@ -93,7 +99,6 @@ const Playbar = () => {
                 </Stack>
                 <Stack sx={{ m: 2 }} spacing={2} direction="row" justifyContent="center" alignItems="center" width="700px">
                     <TimeControls sx={{ minWidth: '300px' }} />
-                    <p>{formattedDuration}</p>
                 </Stack>
             </Stack>
             <Stack sx={{ m: 2, minWidth: '200px' }} spacing={2} direction="row" justifyContent="center" alignItems="center" width="200px">

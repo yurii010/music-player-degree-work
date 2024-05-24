@@ -5,6 +5,7 @@ logs
 **/*.back.*
 
 public/images
+public/playlistsPhoto
 src/assets/
 node_modules
 bower_components

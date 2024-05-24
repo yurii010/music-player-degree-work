@@ -8,7 +8,7 @@ import "../css/main.css";
 import axios from 'axios';
 
 const Menu = () => {
-  const { onChangeMenuItem } = useContext(AudioContext);
+  const { onChangeMenuItem, onChangePlaylist } = useContext(AudioContext);
   const { userPhoto, loadUserAvatar, userPlaylists, getPlaylists } = useAuthContext();
   const uid = localStorage.getItem('uid');
 
@@ -38,8 +38,14 @@ const Menu = () => {
         <FavoriteIcon onClick={() => onChangeMenuItem('favorite')} />
         <PlaylistAddIcon onClick={handleCreatePlaylist} />
         <Stack className='users-playlist'>
-          {userPlaylists.map((playlist, index) => (
-            <img key={index} width='50px' src={playlist.playlist_image} onClick={() => onChangeMenuItem('userPlaylist')} />
+          {userPlaylists.map((playlist) => (
+            <Stack direction={'row'} key={playlist.playlist_id}>
+              <img width='50px' src={playlist.playlist_image}
+                onClick={() => { onChangeMenuItem('userPlaylist'); onChangePlaylist(playlist); }} />
+              <p onClick={() => { onChangeMenuItem('userPlaylist'); onChangePlaylist(playlist); }}>
+                {playlist.playlist_name}
+              </p>
+            </Stack>
           ))}
         </Stack>
       </Stack>
