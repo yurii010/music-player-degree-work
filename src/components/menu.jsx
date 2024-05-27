@@ -28,23 +28,27 @@ const Menu = () => {
   };
 
   return (
-    <Box width='200px' sx={{ height: '100vh' }} border="1px solid black">
-      <Stack width='200px' height='150px' alignItems="center" justifyContent="center">
-        <img onClick={() => onChangeMenuItem('profile')} className="avatar-img" width='170px' height='100px' src={userPhoto} />
+    <Box width='200px' sx={{ height: '100vh' }} bgcolor={'#202020'} alignItems="center" justifyContent='center'>
+      <Stack alignItems="center" justifyContent="center" width='185px' height='165px' bgcolor='#292929' m={1} borderRadius={5}>
+        <img onClick={() => onChangeMenuItem('profile')} className="avatar-img" width='175px' height='100px' src={userPhoto} />
       </Stack>
-      <Stack>
-        <p onClick={() => onChangeMenuItem('golovna')}>Golovna</p>
-        <p onClick={() => onChangeMenuItem('search')}>Search</p>
-        <FavoriteIcon onClick={() => onChangeMenuItem('favorite')} />
-        <PlaylistAddIcon onClick={handleCreatePlaylist} />
+      <Stack bgcolor='#292929' m={1} borderRadius={5} height='75%' padding={2} rowGap={1}>
+        <p onClick={() => onChangeMenuItem('golovna')}>Головна сторінка</p>
+        <p onClick={() => onChangeMenuItem('search')}>Пошук</p>
+        <Stack direction="row" alignItems="center" spacing={1} onClick={() => onChangeMenuItem('favorite')}>
+          <p>Любимий список <FavoriteIcon /></p>
+        </Stack>
+        <Stack direction="row" alignItems="center" spacing={1} onClick={handleCreatePlaylist}>
+          <p>Створити плейлист <PlaylistAddIcon /></p>
+        </Stack>
         <Stack className='users-playlist'>
           {userPlaylists.map((playlist) => (
-            <Stack direction={'row'} key={playlist.playlist_id}>
-              <img width='50px' src={playlist.playlist_image}
-                onClick={() => { onChangeMenuItem('userPlaylist'); onChangePlaylist(playlist); }} />
-              <p onClick={() => { onChangeMenuItem('userPlaylist'); onChangePlaylist(playlist); }}>
-                {playlist.playlist_name}
-              </p>
+            <Stack className='menu-playlist-item' direction={'row'} key={playlist.playlist_id} columnGap={1}>
+              <Stack bgcolor='white' padding={0.5} borderRadius={2}>
+                <img width='35px' src={playlist.playlist_image} onClick={() => { onChangeMenuItem('userPlaylist'); onChangePlaylist(playlist); }} />
+              </Stack>
+              <p onClick={() => { onChangeMenuItem('userPlaylist'); onChangePlaylist(playlist); }}
+                style={{ wordBreak: 'break-word', whiteSpace: 'normal' }}>{playlist.playlist_name}</p>
             </Stack>
           ))}
         </Stack>

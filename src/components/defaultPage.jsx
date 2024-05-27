@@ -5,7 +5,8 @@ import axios from "axios";
 import secondsToMMSS from "../utils/secondsToMMSS";
 
 const DefaultPage = () => {
-    const { activeDefPlaylist, defaultPlaylistSongs, setDefaultPlaylistSongs } = useContext(AudioContext);
+    const { activeDefPlaylist } = useContext(AudioContext);
+    const [defaultPlaylistSongs, setDefaultPlaylistSongs] = useState([]);
 
     useEffect(() => {
         if (!activeDefPlaylist) return;
@@ -34,7 +35,7 @@ const DefaultPage = () => {
             </div>
             <div className="list">
                 {defaultPlaylistSongs.map((track, index) => (
-                    <Track key={index} {...track} />
+                    <Track key={index} {...track} playlistType="defaultPlaylist" listId={activeDefPlaylist.default_playlist_id} />
                 ))}
             </div>
         </div>

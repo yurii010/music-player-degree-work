@@ -9,12 +9,18 @@ import axios from "axios";
 import TrackMenu from './trackMenu';
 
 const Track = (props) => {
-    const { song_id, song_name, song_author, song_image, song_duration, author_id, album_id } = props;
-    const { handleToggleAudio, currentTrack, isPlaying, findAuthorById, onChangeMenuItem } = useContext(AudioContext);
+    const { song_id, song_name, song_author, song_image, song_duration, author_id, album_id, playlistType, listId } = props;
+    const { handleToggleAudio, currentTrack, isPlaying, findAuthorById, onChangeMenuItem, albums, findAlbumById } = useContext(AudioContext);
     const [isFavorite, setIsFavorite] = useState(false);
+    const [albumName, setAlbumName] = useState();
     const formattedDuration = secondsToMMSS(song_duration);
     const isCurrentTrack = currentTrack.song_id === song_id;
     const uid = localStorage.getItem('uid');
+
+    const getAlbumNameFromId = (albumId) => {
+        const album = albums.find(album => album.album_id == albumId);
+        return (album ? setAlbumName(album.album_name) : setAlbumName(''));
+    }
 
     useEffect(() => {
         const checkIfFavorite = async () => {
@@ -27,6 +33,7 @@ const Track = (props) => {
                 console.error('Error checking if song is favorite:', error);
             }
         };
+        getAlbumNameFromId(album_id);
         checkIfFavorite();
     }, [uid, song_id]);
 
@@ -49,10 +56,15 @@ const Track = (props) => {
         onChangeMenuItem('author');
     };
 
+    const handleAlbumClick = (albumId) => {
+        findAlbumById(albumId);
+        onChangeMenuItem('album');
+    }
+
     return (
         <Stack sx={{ my: 0.5 }} direction="row" justifyContent="space-between" alignItems="center" width="500px" height="70px">
             <Stack>
-                <IconButton onClick={() => handleToggleAudio(props)}>
+                <IconButton onClick={() => handleToggleAudio(props, playlistType, listId)}>
                     {isCurrentTrack && isPlaying ? <Pause /> : <PlayArrow />}
                 </IconButton>
             </Stack>
@@ -62,6 +74,9 @@ const Track = (props) => {
             <Stack width="150px">
                 <p>{song_name}</p>
                 <p style={{ cursor: 'pointer', color: 'blue' }} onClick={() => handleAuthorClick(author_id)}>{song_author}</p>
+            </Stack>
+            <Stack style={{ cursor: 'pointer', color: 'blue' }} onClick={() => handleAlbumClick(album_id)}>
+                {albumName}
             </Stack>
             <Stack>
                 <p>{formattedDuration}</p>
@@ -78,9 +93,9 @@ const Track = (props) => {
                 )}
             </Stack>
             <Stack>
-                <TrackMenu songId={song_id} albumId={album_id}/>
+                <TrackMenu songId={song_id} albumId={album_id} />
             </Stack>
-        </Stack>
+        </Stack >
     );
 };
 

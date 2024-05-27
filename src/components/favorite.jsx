@@ -1,11 +1,12 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import axios from 'axios';
 import { AudioContext } from "../context/AudioContext";
 import { Stack } from "@mui/material";
 import Track from "../track/track";
 
 const Favorite = () => {
-    const { favoriteSongs, setFavoriteSongs } = useContext(AudioContext);
+    const [favoriteSongs, setFavoriteSongs] = useState([]);
+    const { } = useContext(AudioContext);
     const uid = localStorage.getItem('uid');
 
     useEffect(() => {
@@ -20,11 +21,10 @@ const Favorite = () => {
         fetchFavoriteSongs();
     }, []);
 
-
     return (
         <Stack sx={{ m: 5 }} alignItems="center" className="list">
             {favoriteSongs.map((track, index) => (
-                <Track key={index} {...track} />
+                <Track key={index} {...track} playlistType="favoriteList" listId={uid} />
             ))}
         </Stack>
     );

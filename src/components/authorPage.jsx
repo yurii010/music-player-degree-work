@@ -6,7 +6,8 @@ import { Stack } from "@mui/material";
 import Album from '../track/albums';
 
 const AuthorPage = () => {
-  const { activeAuthor, albums, onChangeMenuItem, onChangeAlbum, authorsSongs, setAuthorsSongs } = useContext(AudioContext);
+  const { activeAuthor, albums, onChangeMenuItem, onChangeAlbum } = useContext(AudioContext);
+  const [authorsSongs, setAuthorsSongs] = useState([]);
   const [authorAlbums, setAuthorAlbums] = useState([]);
 
   if (!activeAuthor) {
@@ -36,7 +37,7 @@ const AuthorPage = () => {
       </Stack>
       <Stack className="list">
         {authorsSongs.map((track, index) => (
-          <Track key={index} {...track} />
+          <Track key={index} {...track} playlistType="authorType" listId={activeAuthor.author_id} />
         ))}
       </Stack>
       <Stack alignItems="center" flexDirection={'row'} justifyContent={'center'} columnGap={'10px'}>

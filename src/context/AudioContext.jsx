@@ -7,9 +7,9 @@ const audio = new Audio();
 
 const AudioProvider = ({ children }) => {
   const [defaultTrack, setDefaulTrack] = useState([]);
-  const [defaultPlaylists, setDefaultPlaylists] = useState([]);
   const [currentTrack, setCurrentTrack] = useState(defaultTrack);
   const [isPlaying, setPlaying] = useState(false);
+  const [defaultPlaylists, setDefaultPlaylists] = useState([]);
   const [openPlaylistEdit, setOpenPlaylistEdit] = useState(false);
   const [menuItem, setMenuItem] = useState();
   const [activePlaylist, setActivePlaylist] = useState();
@@ -20,12 +20,10 @@ const AudioProvider = ({ children }) => {
   const [albums, setAlbums] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [playlistCountAndDuration, setPlaylistCountAndDuration] = useState();
+  const [listType, setListType] = useState();
+  const [listId, setListId] = useState();
+  const [activeListSong, setActiveListSong] = useState();
 
-  const [albumsSongs, setAlbumsSongs] = useState([]);
-  const [authorsSongs, setAuthorsSongs] = useState([]);
-  const [favoriteSongs, setFavoriteSongs] = useState([]);
-  const [songsPlaylist, setSongsPlaylist] = useState([]);
-  const [defaultPlaylistSongs, setDefaultPlaylistSongs] = useState([]);
   const [songs, setSongs] = useState([]);
 
   useEffect(() => {
@@ -37,13 +35,34 @@ const AudioProvider = ({ children }) => {
       });
   }, []);
 
-  const handleToggleAudio = (track) => {
+  const songListPlaying = () => {
+    switch (listType) {
+      case 'standartList':
+        break;
+      case 'defaultPlaylist':
+        break;
+      case 'albumType':
+        break;
+      case 'authorType':
+        break;
+      case 'userPlaylist':
+        break;
+      case 'favoriteList':
+        break;
+    }
+  }
+
+  const handleToggleAudio = (track, type, listid) => {
     if (currentTrack.song_id !== track.song_id) {
       setCurrentTrack(track);
       audio.src = track.song_path;
       audio.currentTime = 0;
       audio.play();
       setPlaying(true);
+      setListType(type);
+      setListId(listid);
+      console.log(type);
+      console.log(listid);
     } else {
       if (isPlaying) {
         audio.pause();
@@ -55,6 +74,10 @@ const AudioProvider = ({ children }) => {
     }
   };
 
+  const removeSongFromPlaylist = (songId) => {
+    setSongsPlaylist(prevSongs => prevSongs.filter(song => song.song_id !== songId));
+  };
+
   const onChangeMenuItem = (item) => {
     return setMenuItem(item);
   }
@@ -62,10 +85,6 @@ const AudioProvider = ({ children }) => {
   const onChangePlaylist = (item) => {
     return setActivePlaylist(item);
   }
-
-  const removeSongFromPlaylist = (songId) => {
-    setSongsPlaylist(prevSongs => prevSongs.filter(song => song.song_id !== songId));
-  };
 
   const onChangeAlbum = (item) => {
     return setActiveAlbum(item);
@@ -113,7 +132,6 @@ const AudioProvider = ({ children }) => {
     getPlaylistName(id);
   }
 
-
   useEffect(() => {
     const fetchAlbumsAndAuthors = async () => {
       if (!menuItem) {
@@ -141,8 +159,6 @@ const AudioProvider = ({ children }) => {
     isPlaying,
     menuItem,
     activePlaylist,
-    songsPlaylist,
-    favoriteSongs,
     openPlaylistEdit,
     playlistName,
     playlistCountAndDuration,
@@ -150,19 +166,12 @@ const AudioProvider = ({ children }) => {
     activeAlbum,
     defaultPlaylists,
     activeDefPlaylist,
-    albumsSongs,
-    authorsSongs,
-    defaultPlaylistSongs,
-    setDefaultPlaylistSongs,
-    setAuthorsSongs,
-    setAlbumsSongs,
+    listType,
     findAuthorById,
     findAlbumById,
     setPlaylistCountAndDuration,
     getPlaylistName,
     setOpenPlaylistEdit,
-    setFavoriteSongs,
-    setSongsPlaylist,
     removeSongFromPlaylist,
     onChangePlaylist,
     handleToggleAudio,

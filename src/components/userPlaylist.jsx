@@ -8,17 +8,9 @@ import secondsToMMSS from '../utils/secondsToMMSS';
 import ModalEditPlaylist from '../components/modal';
 
 const UserPlaylist = () => {
-    const {
-        activePlaylist,
-        onChangeMenuItem,
-        songsPlaylist,
-        setSongsPlaylist,
-        setOpenPlaylistEdit,
-        playlistName,
-        getPlaylistName,
-        playlistCountAndDuration,
-        setPlaylistCountAndDuration
-    } = useContext(AudioContext);
+    const { activePlaylist, onChangeMenuItem, setOpenPlaylistEdit, playlistName, getPlaylistName, playlistCountAndDuration, setPlaylistCountAndDuration } = useContext(AudioContext);
+    const [songsPlaylist, setSongsPlaylist] = useState([]);
+
 
     useEffect(() => {
         if (!activePlaylist) return;
@@ -73,7 +65,7 @@ const UserPlaylist = () => {
             </Stack>
             <Stack direction="column" spacing={2}>
                 {songsPlaylist.map((song) => (
-                    <Track key={song.song_id} {...song} />
+                    <Track key={song.song_id} {...song} playlistType="userPlaylist" listId={activePlaylist.playlist_id} />
                 ))}
             </Stack>
             <ModalEditPlaylist />

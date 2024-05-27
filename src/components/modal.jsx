@@ -18,7 +18,7 @@ const ModalEditPlaylist = () => {
     }, [playlistName]);
 
     const handleChange = (event) => {
-        if (event.target.value.length <= 30) {
+        if (event.target.value.length <= 28) {
             setInputValue(event.target.value);
         }
     };
@@ -39,7 +39,7 @@ const ModalEditPlaylist = () => {
                     <form onSubmit={(event) => { event.preventDefault(); setOpenPlaylistEdit(false); newName(id, inputValue); }}>
                         <Stack spacing={2}>
                             <FormControl>
-                                <Input inputprops={{ maxLength: 30 }} value={inputValue} onChange={handleChange} required />
+                                <Input inputprops={{ maxLength: 28 }} value={inputValue} onChange={handleChange} required />
                             </FormControl>
                             <Button type="submit">Змінити</Button>
                         </Stack>

@@ -19,7 +19,7 @@ const TrackList = () => {
             </Stack>
             <Stack sx={{ m: 5 }} alignItems="center" className="list">
                 {songs.map((track, index) => (
-                    <Track key={index} {...track} />
+                    <Track key={index} {...track} playlistType="standartList" />
                 ))}
             </Stack>
         </Stack>
