@@ -5,8 +5,7 @@ import { Stack } from "@mui/material";
 import Track from "../track/track";
 
 const Favorite = () => {
-    const [favoriteSongs, setFavoriteSongs] = useState([]);
-    const { } = useContext(AudioContext);
+    const { favoriteSongs, setFavoriteSongs } = useContext(AudioContext);
     const uid = localStorage.getItem('uid');
 
     useEffect(() => {
@@ -24,7 +23,7 @@ const Favorite = () => {
     return (
         <Stack sx={{ m: 5 }} alignItems="center" className="list">
             {favoriteSongs.map((track, index) => (
-                <Track key={index} {...track} playlistType="favoriteList" listId={uid} />
+                <Track key={index} {...track} playlistType="favoriteList"/>
             ))}
         </Stack>
     );

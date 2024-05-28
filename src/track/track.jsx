@@ -9,7 +9,7 @@ import axios from "axios";
 import TrackMenu from './trackMenu';
 
 const Track = (props) => {
-    const { song_id, song_name, song_author, song_image, song_duration, author_id, album_id, playlistType, listId } = props;
+    const { song_id, song_name, song_author, song_image, song_duration, author_id, album_id, playlistType } = props;
     const { handleToggleAudio, currentTrack, isPlaying, findAuthorById, onChangeMenuItem, albums, findAlbumById } = useContext(AudioContext);
     const [isFavorite, setIsFavorite] = useState(false);
     const [albumName, setAlbumName] = useState();
@@ -64,7 +64,7 @@ const Track = (props) => {
     return (
         <Stack sx={{ my: 0.5 }} direction="row" justifyContent="space-between" alignItems="center" width="500px" height="70px">
             <Stack>
-                <IconButton onClick={() => handleToggleAudio(props, playlistType, listId)}>
+                <IconButton onClick={() => handleToggleAudio(props, playlistType)}>
                     {isCurrentTrack && isPlaying ? <Pause /> : <PlayArrow />}
                 </IconButton>
             </Stack>

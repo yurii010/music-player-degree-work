@@ -5,8 +5,7 @@ import axios from "axios";
 import secondsToMMSS from "../utils/secondsToMMSS";
 
 const AlbumPage = () => {
-  const { activeAlbum } = useContext(AudioContext);
-  const [albumsSongs, setAlbumsSongs] = useState([]);
+  const { activeAlbum, albumsSongs, setAlbumsSongs } = useContext(AudioContext);
   const [songCount, setSongCount] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
 
@@ -39,7 +38,7 @@ const AlbumPage = () => {
       </div>
       <div className="list">
         {albumsSongs.map((track, index) => (
-          <Track key={index} {...track} playlistType="albumType" listId={activeAlbum.album_id} />
+          <Track key={index} {...track} playlistType="albumType"/>
         ))}
       </div>
     </div>

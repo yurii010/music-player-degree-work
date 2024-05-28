@@ -8,8 +8,7 @@ import secondsToMMSS from '../utils/secondsToMMSS';
 import ModalEditPlaylist from '../components/modal';
 
 const UserPlaylist = () => {
-    const { activePlaylist, onChangeMenuItem, setOpenPlaylistEdit, playlistName, getPlaylistName, playlistCountAndDuration, setPlaylistCountAndDuration } = useContext(AudioContext);
-    const [songsPlaylist, setSongsPlaylist] = useState([]);
+    const { activePlaylist, onChangeMenuItem, setOpenPlaylistEdit, playlistName, getPlaylistName, playlistCountAndDuration, setPlaylistCountAndDuration, songsPlaylist, setSongsPlaylist } = useContext(AudioContext);
 
 
     useEffect(() => {
@@ -43,7 +42,7 @@ const UserPlaylist = () => {
     }
 
     return (
-        <Stack className="list" direction="column" width="100%" sx={{ mt: 2 }}>
+        <Stack direction="column" width="100%" sx={{ mt: 2 }}>
             <Stack direction='row' justifyContent='' width='100%' sx={{ mb: 2 }}>
                 <Stack>
                     <img width='80px' src={activePlaylist.playlist_image} alt={activePlaylist.playlist_name} />
@@ -63,9 +62,9 @@ const UserPlaylist = () => {
                 </Stack>
                 <button onClick={deletePlaylist}>Видалити плейлист</button>
             </Stack>
-            <Stack direction="column" spacing={2}>
+            <Stack className="list" direction="column" spacing={2}>
                 {songsPlaylist.map((song) => (
-                    <Track key={song.song_id} {...song} playlistType="userPlaylist" listId={activePlaylist.playlist_id} />
+                    <Track key={song.song_id} {...song} playlistType="userPlaylist" />
                 ))}
             </Stack>
             <ModalEditPlaylist />

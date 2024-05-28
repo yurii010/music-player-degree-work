@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { AudioContext } from '../context/AudioContext';
 import { PlayArrow, Pause, SkipPrevious, SkipNext, VolumeUp, VolumeDown, Repeat, RepeatOne, Shuffle } from "@mui/icons-material";
+import ShuffleOnIcon from '@mui/icons-material/ShuffleOn';
 import { Stack, IconButton, Slider, Box } from '@mui/material';
 import secondsToMMSS from '../utils/secondsToMMSS';
 import '../css/playbar.css';
@@ -68,7 +69,7 @@ const LoudControls = () => {
 };
 
 const Playbar = () => {
-    const { currentTrack, isPlaying, handleToggleAudio, findAuthorById, onChangeMenuItem } = useContext(AudioContext);
+    const { currentTrack, isPlaying, handleToggleAudio, findAuthorById, onChangeMenuItem, playNextSong, playPreviousSong, toggleShuffle, shuffle, repeatOne, toggleRepeatOne } = useContext(AudioContext);
     const { song_id, song_name, song_author, author_id, song_image } = currentTrack;
     const isCurrentTrack = currentTrack.song_id === song_id;
 
@@ -88,14 +89,17 @@ const Playbar = () => {
             </Stack>
             <Stack spacing={1} direction="column" justifyContent="center" alignItems="center">
                 <Stack spacing={2} direction="row" justifyContent="center" alignItems="center" width="500px">
-                    <Shuffle className='shuffleIcon' />
-                    <SkipPrevious />
+                    <IconButton onClick={toggleShuffle} >
+                        {shuffle ? <ShuffleOnIcon /> : <Shuffle />}
+                    </IconButton>
+                    <SkipPrevious onClick={() => playPreviousSong()} />
                     <IconButton onClick={() => handleToggleAudio(currentTrack)}>
                         {isCurrentTrack && isPlaying ? <Pause /> : <PlayArrow />}
                     </IconButton>
-                    <SkipNext className='skipNextIcon' />
-                    <Repeat className='repeatIcon' />
-                    <RepeatOne className='repeatOneIcon' sx={{ display: 'none' }} />
+                    <SkipNext className='skipNextIcon' onClick={() => playNextSong()} />
+                    <IconButton onClick={toggleRepeatOne}>
+                        {repeatOne ? <RepeatOne /> : <Repeat />}
+                    </IconButton>
                 </Stack>
                 <Stack sx={{ m: 2 }} spacing={2} direction="row" justifyContent="center" alignItems="center" width="700px">
                     <TimeControls sx={{ minWidth: '300px' }} />

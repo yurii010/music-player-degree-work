@@ -6,9 +6,6 @@ export const AudioContext = createContext({});
 const audio = new Audio();
 
 const AudioProvider = ({ children }) => {
-  const [defaultTrack, setDefaulTrack] = useState([]);
-  const [currentTrack, setCurrentTrack] = useState(defaultTrack);
-  const [isPlaying, setPlaying] = useState(false);
   const [defaultPlaylists, setDefaultPlaylists] = useState([]);
   const [openPlaylistEdit, setOpenPlaylistEdit] = useState(false);
   const [menuItem, setMenuItem] = useState();
@@ -20,11 +17,22 @@ const AudioProvider = ({ children }) => {
   const [albums, setAlbums] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [playlistCountAndDuration, setPlaylistCountAndDuration] = useState();
-  const [listType, setListType] = useState();
-  const [listId, setListId] = useState();
-  const [activeListSong, setActiveListSong] = useState();
 
+  const [albumsSongs, setAlbumsSongs] = useState([]);
+  const [authorsSongs, setAuthorsSongs] = useState([]);
+  const [defaultPlaylistSongs, setDefaultPlaylistSongs] = useState([]);
+  const [songsPlaylist, setSongsPlaylist] = useState([]);
+  const [favoriteSongs, setFavoriteSongs] = useState([]);
   const [songs, setSongs] = useState([]);
+
+  const [listType, setListType] = useState();
+  const [activeListSong, setActiveListSong] = useState([]);
+  const [shuffle, setShuffle] = useState(false);
+  const [defaultTrack, setDefaulTrack] = useState([]);
+  const [currentTrack, setCurrentTrack] = useState(defaultTrack);
+  const [isPlaying, setPlaying] = useState(false);
+  const [playedSongsHistory, setPlayedSongsHistory] = useState([]);
+  const [repeatOne, setRepeatOne] = useState(false);
 
   useEffect(() => {
     fetch('http://localhost:8081/songsAndAuthors')
@@ -35,24 +43,58 @@ const AudioProvider = ({ children }) => {
       });
   }, []);
 
-  const songListPlaying = () => {
-    switch (listType) {
+  const songListPlaying = (list) => {
+    switch (list) {
       case 'standartList':
+        setShuffle(false);
+        setActiveListSong(songs);
         break;
       case 'defaultPlaylist':
+        setShuffle(false);
+        setActiveListSong(defaultPlaylistSongs);
         break;
       case 'albumType':
+        setShuffle(false);
+        setActiveListSong(albumsSongs);
         break;
       case 'authorType':
+        setShuffle(false);
+        setActiveListSong(authorsSongs);
         break;
       case 'userPlaylist':
+        setShuffle(false);
+        setActiveListSong(songsPlaylist);
         break;
       case 'favoriteList':
+        setShuffle(false);
+        setActiveListSong(favoriteSongs);
+        break;
+      default:
+        setShuffle(false);
+        setActiveListSong([]);
         break;
     }
   }
 
-  const handleToggleAudio = (track, type, listid) => {
+  useEffect(() => {
+    if (currentTrack) {
+      setPlayedSongsHistory(prevHistory => [...prevHistory, currentTrack.song_id]);
+    }
+  }, [currentTrack]);
+
+  useEffect(() => {
+    if (repeatOne && shuffle) {
+      setRepeatOne(false);
+      setShuffle(false);
+    } else if (repeatOne) {
+      setShuffle(false);
+    } else if (shuffle) {
+      setRepeatOne(false);
+    }
+  }, [repeatOne, shuffle, setShuffle, setRepeatOne]);
+  
+
+  const handleToggleAudio = (track, type) => {
     if (currentTrack.song_id !== track.song_id) {
       setCurrentTrack(track);
       audio.src = track.song_path;
@@ -60,9 +102,7 @@ const AudioProvider = ({ children }) => {
       audio.play();
       setPlaying(true);
       setListType(type);
-      setListId(listid);
-      console.log(type);
-      console.log(listid);
+      songListPlaying(type);
     } else {
       if (isPlaying) {
         audio.pause();
@@ -73,6 +113,102 @@ const AudioProvider = ({ children }) => {
       }
     }
   };
+
+  const playRandomSong = () => {
+    let remainingSongs = activeListSong.filter(song => !playedSongsHistory.includes(song.song_id));
+    if (remainingSongs.length === 0) {
+      setPlayedSongsHistory([]);
+      remainingSongs = activeListSong;
+    }
+    const randomIndex = Math.floor(Math.random() * remainingSongs.length);
+    const nextTrack = remainingSongs[randomIndex];
+    setCurrentTrack(nextTrack);
+    audio.src = nextTrack.song_path;
+    audio.currentTime = 0;
+    audio.play();
+  };
+
+  const playNextSong = () => {
+    const remainingSongs = activeListSong.filter(song => !playedSongsHistory.includes(song.song_id));
+    if (shuffle && remainingSongs.length === 0) {
+      setPlayedSongsHistory([]);
+    }
+    if (shuffle) {
+      playRandomSong();
+    } else {
+      const currentIndex = activeListSong.findIndex(song => song.song_id === currentTrack.song_id);
+      const nextIndex = (currentIndex + 1) % activeListSong.length;
+      const nextTrack = activeListSong[nextIndex];
+      if (repeatOne) {
+        setCurrentTrack(currentTrack);
+        audio.src = currentTrack.song_path;
+        audio.currentTime = 0;
+        audio.play();
+      } else {
+        setCurrentTrack(nextTrack);
+        audio.src = nextTrack.song_path;
+        audio.currentTime = 0;
+        audio.play();
+      }
+    }
+  };
+
+  const playPreviousSong = () => {
+    if (shuffle) {
+      const lastPlayedSongIndex = playedSongsHistory.length - 2;
+      if (lastPlayedSongIndex >= 0) {
+        const lastPlayedSongId = playedSongsHistory[lastPlayedSongIndex];
+        const lastPlayedSong = activeListSong.find(song => song.song_id === lastPlayedSongId);
+        if (lastPlayedSong) {
+          setCurrentTrack(lastPlayedSong);
+          audio.src = lastPlayedSong.song_path;
+          audio.currentTime = 0;
+          audio.play();
+          setPlayedSongsHistory(prevHistory => prevHistory.slice(0, -1));
+        }
+      }
+    } else {
+      const currentIndex = activeListSong.findIndex(song => song.song_id === currentTrack.song_id);
+      const prevIndex = (currentIndex - 1 + activeListSong.length) % activeListSong.length;
+      const prevTrack = activeListSong[prevIndex];
+      if (repeatOne) {
+        setCurrentTrack(currentTrack);
+        audio.src = currentTrack.song_path;
+        audio.currentTime = 0;
+        audio.play();
+      } else {
+        setCurrentTrack(prevTrack);
+        audio.src = prevTrack.song_path;
+        audio.currentTime = 0;
+        audio.play();
+      }
+    }
+  };
+
+
+  const toggleShuffle = () => {
+    if (!shuffle) {
+      setPlayedSongsHistory([]);
+    }
+    setShuffle(!shuffle);
+  };
+
+  const toggleRepeatOne = () => {
+    setRepeatOne(!repeatOne);
+  };
+
+  useEffect(() => {
+    if (shuffle && currentTrack) {
+      setPlayedSongsHistory(prevHistory => [...prevHistory, currentTrack.song_id]);
+    }
+  }, [currentTrack, shuffle]);
+
+  useEffect(() => {
+    audio.addEventListener('ended', playNextSong);
+    return () => {
+      audio.removeEventListener('ended', playNextSong);
+    };
+  }, [currentTrack, activeListSong, shuffle]);
 
   const removeSongFromPlaylist = (songId) => {
     setSongsPlaylist(prevSongs => prevSongs.filter(song => song.song_id !== songId));
@@ -152,7 +288,6 @@ const AudioProvider = ({ children }) => {
 
   const value = {
     audio,
-    songs,
     albums,
     authors,
     currentTrack,
@@ -180,6 +315,18 @@ const AudioProvider = ({ children }) => {
     onChangeAuthor,
     newName,
     onChangeDefPlaylist,
+    playNextSong,
+    playPreviousSong,
+
+    repeatOne, toggleRepeatOne,
+    shuffle, toggleShuffle,
+
+    songs,
+    albumsSongs, setAlbumsSongs,
+    authorsSongs, setAuthorsSongs,
+    songsPlaylist, setSongsPlaylist,
+    favoriteSongs, setFavoriteSongs,
+    defaultPlaylistSongs, setDefaultPlaylistSongs,
   };
 
   return (
