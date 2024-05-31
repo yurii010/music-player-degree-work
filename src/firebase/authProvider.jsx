@@ -112,7 +112,7 @@ const AuthProvider = (props) => {
         username: username,
         dateCreated: serverTimestamp(),
       };
-
+      localStorage.setItem('uid', user.uid);
       await setDoc(userDocRef, userDocData);
       return true;
     } catch (ex) {

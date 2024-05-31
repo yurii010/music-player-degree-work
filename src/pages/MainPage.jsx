@@ -1,4 +1,3 @@
-import { Stack } from "@mui/material";
 import User from '../components/user';
 import Menu from "../components/menu";
 import Search from '../components/search';
@@ -13,6 +12,7 @@ import { AudioContext } from "../context/AudioContext";
 import { useContext, useState, useEffect } from "react";
 import { useAuthContext } from '../firebase/authProvider';
 import DefaultPage from "../components/defaultPage";
+import '../index.css';
 
 const MainPage = () => {
     const { menuItem } = useContext(AudioContext);
@@ -58,15 +58,15 @@ const MainPage = () => {
     }, [menuItem])
 
     return (
-        <Stack display='flex' direction='row'>
+        <div className="flex flex-row h-screen">
             <Menu />
-            <Stack>
-                <Stack alignItems='center' justifyContent='center' marginLeft='200px' sx={{ width: '100vh' }}>
+            <div className="flex flex-col w-full">
+                <div className="flex-1 overflow-auto">
                     {content}
-                </Stack>
-                <Playbar />
-            </Stack>
-        </Stack>
+                </div>
+                <Playbar className="fixed bottom-0 left-0 w-full" />
+            </div>
+        </div>
     )
 };
 

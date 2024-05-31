@@ -2,9 +2,9 @@ const Album = (props) => {
   const { album_name, album_photo } = props;
 
   return (
-    <div>
-      <img src={album_photo} alt={album_name} width="50" />
-      <span>{album_name}</span>
+    <div className="flex flex-col justify-center m-3">
+      <img src={album_photo} alt={album_name} className="w-36" />
+      <p className="text-3xl text-white hover:text-blue-600">{album_name}</p>
     </div>
   );
 };

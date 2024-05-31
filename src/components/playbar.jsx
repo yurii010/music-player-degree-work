@@ -2,9 +2,8 @@ import { useContext, useEffect, useState } from 'react';
 import { AudioContext } from '../context/AudioContext';
 import { PlayArrow, Pause, SkipPrevious, SkipNext, VolumeUp, VolumeDown, Repeat, RepeatOne, Shuffle } from "@mui/icons-material";
 import ShuffleOnIcon from '@mui/icons-material/ShuffleOn';
-import { Stack, IconButton, Slider, Box } from '@mui/material';
+import { IconButton, Slider } from '@mui/material';
 import secondsToMMSS from '../utils/secondsToMMSS';
-import '../css/playbar.css';
 
 const TimeControls = () => {
     const { audio, currentTrack } = useContext(AudioContext);
@@ -31,17 +30,18 @@ const TimeControls = () => {
     }, []);
 
     return (
-        <>
-            <p>{formattedDuration}</p>
+        <div className='flex flex-row items-center space-x-2'>
+            <p className='pr-2'>{formattedDuration}</p>
             <Slider
                 step={1}
                 min={0}
                 max={100}
                 value={sliderCurrentTime}
                 onChange={handleChangeCurrentTime}
+                className='flex-grow'
             />
-            <p>{songDuration}</p>
-        </>
+            <p className='pl-2'>{songDuration}</p>
+        </div>
     );
 };
 
@@ -57,14 +57,15 @@ const LoudControls = () => {
     });
 
     return (
-        <>
+        <div className='flex flex-row items-center space-x-2 mr-2'>
             <VolumeDown />
             <Slider
                 value={valueLoud}
                 onChange={loudnessChange}
+                className='w-64'
             />
             <VolumeUp />
-        </>
+        </div>
     );
 };
 
@@ -79,36 +80,42 @@ const Playbar = () => {
     };
 
     return (
-        <Box sx={{ position: 'fixed', bottom: 0, width: '100vh', justifyContent: 'center', marginLeft: '15%' }} className='playbar-div'>
-            <Stack sx={{ m: 2, marginLeft: '0' }} spacing={2} direction="row" alignItems="center" justifyContent="center" width='200px' height='70px'>
-                <img width='70px' src={song_image} alt={song_name} />
-                <Box sx={{ minWidth: '100px' }}>
-                    <p>{song_name}</p>
-                    <p style={{ cursor: 'pointer', color: 'blue' }} onClick={() => handleAuthorClick(author_id)}>{song_author}</p>
-                </Box>
-            </Stack>
-            <Stack spacing={1} direction="column" justifyContent="center" alignItems="center">
-                <Stack spacing={2} direction="row" justifyContent="center" alignItems="center" width="500px">
-                    <IconButton onClick={toggleShuffle} >
-                        {shuffle ? <ShuffleOnIcon /> : <Shuffle />}
-                    </IconButton>
-                    <SkipPrevious onClick={() => playPreviousSong()} />
-                    <IconButton onClick={() => handleToggleAudio(currentTrack)}>
-                        {isCurrentTrack && isPlaying ? <Pause /> : <PlayArrow />}
-                    </IconButton>
-                    <SkipNext className='skipNextIcon' onClick={() => playNextSong()} />
-                    <IconButton onClick={toggleRepeatOne}>
-                        {repeatOne ? <RepeatOne /> : <Repeat />}
-                    </IconButton>
-                </Stack>
-                <Stack sx={{ m: 2 }} spacing={2} direction="row" justifyContent="center" alignItems="center" width="700px">
-                    <TimeControls sx={{ minWidth: '300px' }} />
-                </Stack>
-            </Stack>
-            <Stack sx={{ m: 2, minWidth: '200px' }} spacing={2} direction="row" justifyContent="center" alignItems="center" width="200px">
-                <LoudControls />
-            </Stack>
-        </Box>
+        <div className='bg-[#212121] p-3 text-white'>
+            <div className='w-full flex flex-row items-center justify-between bg-[#292929] rounded-2xl'>
+                <div className='flex flex-row items-center space-x-4 p-2'>
+                    <img src={song_image} alt={song_name} className='ml-2 w-16 h-16 object-cover' />
+                    <div className='flex flex-col'>
+                        <p className='whitespace-nowrap overflow-hidden overflow-ellipsis w-52'>{song_name}</p>
+                        <p onClick={() => handleAuthorClick(author_id)} className='text-white hover:text-blue-600 cursor-pointer whitespace-nowrap overflow-hidden overflow-ellipsis w-32'>{song_author}</p>
+                    </div>
+                </div>
+                <div className='flex flex-col items-center space-y-2 p-2'>
+                    <div className='flex flex-row items-center space-x-2'>
+                        <IconButton style={{ color: 'white' }} onClick={toggleShuffle} >
+                            {shuffle ? <ShuffleOnIcon /> : <Shuffle />}
+                        </IconButton>
+                        <IconButton style={{ color: 'white' }} onClick={playPreviousSong}>
+                            <SkipPrevious />
+                        </IconButton>
+                        <IconButton style={{ color: 'white' }} onClick={() => handleToggleAudio(currentTrack)}>
+                            {isCurrentTrack && isPlaying ? <Pause /> : <PlayArrow />}
+                        </IconButton>
+                        <IconButton style={{ color: 'white' }} onClick={playNextSong}>
+                            <SkipNext />
+                        </IconButton>
+                        <IconButton style={{ color: 'white' }} onClick={toggleRepeatOne}>
+                            {repeatOne ? <RepeatOne /> : <Repeat />}
+                        </IconButton>
+                    </div>
+                    <div className='w-96'>
+                        <TimeControls />
+                    </div>
+                </div>
+                <div className='w-40 p-2'>
+                    <LoudControls />
+                </div>
+            </div>
+        </div>
     );
 }
 

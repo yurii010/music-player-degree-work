@@ -1,10 +1,10 @@
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import SearchIcon from '@mui/icons-material/Search';
+import HouseIcon from '@mui/icons-material/House';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useAuthContext } from '../firebase/authProvider';
 import { useContext, useEffect } from "react";
 import { AudioContext } from "../context/AudioContext";
-import { Stack, Box } from "@mui/material";
-import "../css/main.css";
 import axios from 'axios';
 
 const Menu = () => {
@@ -28,32 +28,37 @@ const Menu = () => {
   };
 
   return (
-    <Box width='200px' sx={{ height: '100vh' }} bgcolor={'#202020'} alignItems="center" justifyContent='center'>
-      <Stack alignItems="center" justifyContent="center" width='185px' height='165px' bgcolor='#292929' m={1} borderRadius={5}>
-        <img onClick={() => onChangeMenuItem('profile')} className="avatar-img" width='175px' height='100px' src={userPhoto} />
-      </Stack>
-      <Stack bgcolor='#292929' m={1} borderRadius={5} height='75%' padding={2} rowGap={1}>
-        <p onClick={() => onChangeMenuItem('golovna')}>Головна сторінка</p>
-        <p onClick={() => onChangeMenuItem('search')}>Пошук</p>
-        <Stack direction="row" alignItems="center" spacing={1} onClick={() => onChangeMenuItem('favorite')}>
+    <div className='flex flex-col h-screen w-60 bg-[#212121] text-white'>
+      <div className='h-32 w-auto bg-[#292929] rounded-2xl flex items-center justify-center m-2 p-2'>
+        <img
+          onClick={() => onChangeMenuItem('profile')}
+          src={userPhoto}
+          className='m-auto max-h-full max-w-full object-contain'
+        />
+      </div>
+      <div className='h-full w-auto bg-[#292929] rounded-2xl flex flex-col m-2 p-2 gap-y-1'>
+        <p onClick={() => onChangeMenuItem('golovna')}>Головна сторінка<HouseIcon /></p>
+        <p onClick={() => onChangeMenuItem('search')}>Пошук<SearchIcon /></p>
+        <div onClick={() => onChangeMenuItem('favorite')}>
           <p>Любимий список <FavoriteIcon /></p>
-        </Stack>
-        <Stack direction="row" alignItems="center" spacing={1} onClick={handleCreatePlaylist}>
+        </div>
+        <div onClick={handleCreatePlaylist}>
           <p>Створити плейлист <PlaylistAddIcon /></p>
-        </Stack>
-        <Stack className='users-playlist'>
+        </div>
+        <div className='h-72 overflow-auto'>
           {userPlaylists.map((playlist) => (
-            <Stack className='menu-playlist-item' direction={'row'} key={playlist.playlist_id} columnGap={1}>
-              <Stack bgcolor='white' padding={0.5} borderRadius={2}>
-                <img width='35px' src={playlist.playlist_image} onClick={() => { onChangeMenuItem('userPlaylist'); onChangePlaylist(playlist); }} />
-              </Stack>
-              <p onClick={() => { onChangeMenuItem('userPlaylist'); onChangePlaylist(playlist); }}
-                style={{ wordBreak: 'break-word', whiteSpace: 'normal' }}>{playlist.playlist_name}</p>
-            </Stack>
+            <div className='flex flex-row items-center space-x-2' key={playlist.playlist_id}>
+              <div className='flex-shrink-0'>
+                <img src={playlist.playlist_image} onClick={() => { onChangeMenuItem('userPlaylist'); onChangePlaylist(playlist); }} className='w-12 h-12' />
+              </div>
+              <p onClick={() => { onChangeMenuItem('userPlaylist'); onChangePlaylist(playlist); }} className='break-words whitespace-normal'>
+                {playlist.playlist_name}
+              </p>
+            </div>
           ))}
-        </Stack>
-      </Stack>
-    </Box>
+        </div>
+      </div>
+    </div >
   );
 };
 

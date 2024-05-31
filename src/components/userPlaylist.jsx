@@ -1,11 +1,10 @@
-import { Stack } from "@mui/material";
-import "../css/main.css";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { AudioContext } from "../context/AudioContext";
 import axios from "axios";
 import Track from "../track/track";
-import secondsToMMSS from '../utils/secondsToMMSS';
+import secondsToMMSS from '../utils/secondsToTime';
 import ModalEditPlaylist from '../components/modal';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const UserPlaylist = () => {
     const { activePlaylist, onChangeMenuItem, setOpenPlaylistEdit, playlistName, getPlaylistName, playlistCountAndDuration, setPlaylistCountAndDuration, songsPlaylist, setSongsPlaylist } = useContext(AudioContext);
@@ -42,33 +41,37 @@ const UserPlaylist = () => {
     }
 
     return (
-        <Stack direction="column" width="100%" sx={{ mt: 2 }}>
-            <Stack direction='row' justifyContent='' width='100%' sx={{ mb: 2 }}>
-                <Stack>
-                    <img width='80px' src={activePlaylist.playlist_image} alt={activePlaylist.playlist_name} />
-                </Stack>
-                <Stack>
-                    <Stack sx={{ mb: 3 }} onClick={() => setOpenPlaylistEdit(true)}>
-                        <h1>{playlistName}</h1>
-                    </Stack>
-                    <Stack>
+        <div className="bg-[#212121] h-full p-2 text-white">
+            <div className='bg-[#292929] rounded-2xl h-full p-2 flex flex-col'>
+                <div className="flex flex-row border-b-2 border-white m-3">
+                    <img src={activePlaylist.playlist_image} alt={activePlaylist.playlist_name} className="w-36" />
+                    <div className="flex flex-row items-center justify-between m-3 gap-4">
+                        <div onClick={() => setOpenPlaylistEdit(true)}>
+                            <p className="text-4xl">{playlistName}</p>
+                        </div>
                         {playlistCountAndDuration && (
-                            <>
-                                <p>Кількість пісень: {playlistCountAndDuration.song_count}</p>
-                                <p>Час програвання плейлиста: {secondsToMMSS(playlistCountAndDuration.playlist_duration)}</p>
-                            </>
+                            <div>
+                                <p>Кількість треків {playlistCountAndDuration.song_count}</p>
+                                <p>Час програвання {secondsToMMSS(playlistCountAndDuration.playlist_duration)}</p>
+                            </div>
                         )}
-                    </Stack>
-                </Stack>
-                <button onClick={deletePlaylist}>Видалити плейлист</button>
-            </Stack>
-            <Stack className="list" direction="column" spacing={2}>
-                {songsPlaylist.map((song) => (
-                    <Track key={song.song_id} {...song} playlistType="userPlaylist" />
-                ))}
-            </Stack>
+                        <div className="ml-auto">
+                            <button onClick={deletePlaylist}><DeleteIcon /></button>
+                        </div>
+                    </div>
+                </div>
+                <div className='my-5 overflow-auto'>
+                    {songsPlaylist.length === 0 ? (
+                        <p className="ml-3 text-3xl text-[#757575]">Ви ще не добавили ніяких пісень :)</p>
+                    ) : (
+                        songsPlaylist.map((song) => (
+                            <Track key={song.song_id} {...song} playlistType="userPlaylist" />
+                        ))
+                    )}
+                </div>
+            </div>
             <ModalEditPlaylist />
-        </Stack>
+        </div>
     );
 };
 

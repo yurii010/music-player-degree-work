@@ -34,14 +34,14 @@ const ModalEditPlaylist = () => {
     return (
         <Fragment>
             <Modal open={openPlaylistEdit} onClose={() => setOpenPlaylistEdit(false)}>
-                <ModalDialog>
-                    <DialogTitle>Введіть нову назву плейлиста</DialogTitle>
+                <ModalDialog style={{ backgroundColor: '#191919', color: '#fff' }}>
+                    <DialogTitle style={{ backgroundColor: '#212121', color: '#fff' }}>Введіть нову назву плейлиста</DialogTitle>
                     <form onSubmit={(event) => { event.preventDefault(); setOpenPlaylistEdit(false); newName(id, inputValue); }}>
-                        <Stack spacing={2}>
+                        <Stack spacing={2} style={{ padding: '20px' }}>
                             <FormControl>
-                                <Input inputprops={{ maxLength: 28 }} value={inputValue} onChange={handleChange} required />
+                                <Input inputprops={{ maxLength: 28, style: { color: '#fff' } }} value={inputValue} onChange={handleChange} required />
                             </FormControl>
-                            <Button type="submit">Змінити</Button>
+                            <Button type="submit" style={{ backgroundColor: '#424242', color: '#fff' }}>Змінити</Button>
                         </Stack>
                     </form>
                 </ModalDialog>

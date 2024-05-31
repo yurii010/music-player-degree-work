@@ -5,7 +5,6 @@ import AudioProvider from './context/AudioContext.jsx';
 import { BrowserRouter } from 'react-router-dom';
 import { FirebaseProvider } from './firebase/firebaseProvider.jsx';
 import { AuthProvider } from './firebase/authProvider.jsx';
-import './css/main.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

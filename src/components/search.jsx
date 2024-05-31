@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AudioContext } from "../context/AudioContext";
-import { Input, Space, Radio } from 'antd';
-import { Stack } from "@mui/material";
+import { Input, Radio } from 'antd';
 import Track from '../track/track';
 import Albums from '../track/albums';
 import Authors from '../track/authors';
-import "../css/main.css";
 
 const Search = () => {
     const { authors, albums, songs, onChangeAlbum, onChangeAuthor, onChangeMenuItem } = useContext(AudioContext);
@@ -81,17 +79,21 @@ const Search = () => {
     }
 
     return (
-        <Stack>
-            <Search placeholder="Пошук" onChange={handleChange} enterButton />
-            <Radio.Group style={{ marginBottom: 16 }} value={value} onChange={handleRadioChange}>
-                <Radio.Button value="songs">Пісні</Radio.Button>
-                <Radio.Button value="authors">Автори</Radio.Button>
-                <Radio.Button value="albums">Альбоми</Radio.Button>
-            </Radio.Group>
-            <Stack sx={{ m: 5 }} alignItems="center" className="list">
-                {renderResults()}
-            </Stack>
-        </Stack>
+        <div className="bg-[#212121] h-full p-2 text-white">
+            <div className='bg-[#292929] rounded-2xl h-full p-2 flex flex-col'>
+                <div className="flex flex-col border-b-2 border-white m-3">
+                    <Search placeholder="Пошук" onChange={handleChange} enterButton />
+                    <Radio.Group className='flex flex-row my-3' value={value} onChange={handleRadioChange}>
+                        <Radio.Button className="bg-[#333] text-white" value="songs">Пісні</Radio.Button>
+                        <Radio.Button className="bg-[#333] text-white" value="authors">Автори</Radio.Button>
+                        <Radio.Button className="bg-[#333] text-white" value="albums">Альбоми</Radio.Button>
+                    </Radio.Group>
+                </div>
+                <div className='my-3 overflow-auto'>
+                    {renderResults()}
+                </div>
+            </div>
+        </div>
     );
 };
 

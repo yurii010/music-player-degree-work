@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { AudioContext } from "../context/AudioContext";
 import { PlayArrow, Pause } from "@mui/icons-material";
-import { IconButton, Stack } from "@mui/material";
+import { IconButton } from "@mui/material";
 import secondsToMMSS from "../utils/secondsToMMSS";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -9,7 +9,7 @@ import axios from "axios";
 import TrackMenu from './trackMenu';
 
 const Track = (props) => {
-    const { song_id, song_name, song_author, song_image, song_duration, author_id, album_id, playlistType } = props;
+    const { song_id, song_name, song_author, song_image, song_duration, author_id, album_id, playlistType, removeFromFavorites } = props;
     const { handleToggleAudio, currentTrack, isPlaying, findAuthorById, onChangeMenuItem, albums, findAlbumById } = useContext(AudioContext);
     const [isFavorite, setIsFavorite] = useState(false);
     const [albumName, setAlbumName] = useState();
@@ -42,6 +42,9 @@ const Track = (props) => {
             if (isFavorite) {
                 await axios.post('http://localhost:8081/removeFromFavorites', { uid, song_id });
                 setIsFavorite(false);
+                if (playlistType === 'favoriteList') {
+                    removeFromFavorites(song_id);
+                }
             } else {
                 await axios.post('http://localhost:8081/addToFavorites', { uid, song_id });
                 setIsFavorite(true);
@@ -62,40 +65,34 @@ const Track = (props) => {
     }
 
     return (
-        <Stack sx={{ my: 0.5 }} direction="row" justifyContent="space-between" alignItems="center" width="500px" height="70px">
-            <Stack>
+        <div className="flex items-center p-1">
+            <div className="mr-4">
                 <IconButton onClick={() => handleToggleAudio(props, playlistType)}>
-                    {isCurrentTrack && isPlaying ? <Pause /> : <PlayArrow />}
+                    {isCurrentTrack && isPlaying ? <Pause className="text-white" /> : <PlayArrow className="text-white" />}
                 </IconButton>
-            </Stack>
-            <Stack>
-                <img width='70px' src={song_image} alt={song_name} />
-            </Stack>
-            <Stack width="150px">
-                <p>{song_name}</p>
-                <p style={{ cursor: 'pointer', color: 'blue' }} onClick={() => handleAuthorClick(author_id)}>{song_author}</p>
-            </Stack>
-            <Stack style={{ cursor: 'pointer', color: 'blue' }} onClick={() => handleAlbumClick(album_id)}>
+            </div>
+            <div className="mr-4">
+                <img className="w-16 h-16" src={song_image} alt={song_name} />
+            </div>
+            <div className="flex-1 min-w-0 mr-4">
+                <p className="text-lg font-semibold truncate">{song_name}</p>
+                <p className="text-sm text-white hover:text-blue-600 cursor-pointer" onClick={() => handleAuthorClick(author_id)}>{song_author}</p>
+            </div>
+            <div className="text-white hover:text-blue-600 cursor-pointer mr-4" onClick={() => handleAlbumClick(album_id)}>
                 {albumName}
-            </Stack>
-            <Stack>
-                <p>{formattedDuration}</p>
-            </Stack>
-            <Stack>
-                {isFavorite ? (
-                    <IconButton onClick={handleFavoriteClick}>
-                        <FavoriteIcon />
-                    </IconButton>
-                ) : (
-                    <IconButton onClick={handleFavoriteClick}>
-                        <FavoriteBorderIcon />
-                    </IconButton>
-                )}
-            </Stack>
-            <Stack>
+            </div>
+            <div className="mr-4">
+                <p className="text-sm text-gray-500">{formattedDuration}</p>
+            </div>
+            <div className="mr-4">
+                <IconButton onClick={handleFavoriteClick}>
+                    {isFavorite ? <FavoriteIcon className="text-red-500" /> : <FavoriteBorderIcon className="text-white" />}
+                </IconButton>
+            </div>
+            <div>
                 <TrackMenu songId={song_id} albumId={album_id} />
-            </Stack>
-        </Stack >
+            </div>
+        </div>
     );
 };
 

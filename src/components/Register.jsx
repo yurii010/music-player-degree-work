@@ -14,62 +14,67 @@ export const Register = ({ toggleShowRegisterScreen }) => {
 
     let theDisplayName = displayName;
     if (theDisplayName?.length <= 0) {
-      theDisplayName = 'NO DISPLAY NAME PROVIDED 😟';
+      theDisplayName = 'NO DISPLAY NAME PROVIDED';
     }
     let success = await register(email, password, theDisplayName);
     if (!success) {
-      setErrorMessage("Oops! Something went wrong during registration.");
+      setErrorMessage("Ой! Щось пішло не так.");
       setRegistrationRunning(false);
     }
   };
 
   return (
-    <div className="container-fluid px-lg-5 login-form d-flex justify-content-center p-4">
-      <div className="form-container">
-        <h2>Registration</h2>
-        <div id="form">
-          <div className="form-group">
-            <label>Email:</label>
-            <input
-              type='text'
-              name='email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Username:</label>
-            <input
-              type='text'
-              name='displayName'
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label>Password:</label>
-            <input
-              type='password'
-              name='password'
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <button className="switch-to-register" onClick={toggleShowRegisterScreen}>
-              Sign In To Existing Account
-            </button>
-          </div>
-          <div className="form-group">
-            <button className="button-in-form" onClick={handleButtonClick}>
-              Register
-            </button>
-            {errorMessage && (
-              <p className="error-message pt-4">{errorMessage}</p>
-            )}
-          </div>
+    <div className="bg-[#212121] p-8 text-white rounded-xl">
+      <p className="text-2xl mb-4"> Реєстрація</p >
+      <div id="form">
+        <div className="form-group mb-4">
+          <label className="block mb-2">Введіть пошту</label>
+          <input
+            type='text'
+            name='email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-2 rounded bg-gray-800 text-white"
+          />
         </div>
-      </div>
+        <div className="form-group mb-4">
+          <label className="block mb-2">Введіть ім'я користувача</label>
+          <input
+            type='text'
+            name='displayName'
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            className="w-full p-2 rounded bg-gray-800 text-white"
+          />
+        </div>
+        <div className="form-group mb-4">
+          <label className="block mb-2">Введіть пароль</label>
+          <input
+            type='password'
+            name='password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2 rounded bg-gray-800 text-white"
+          />
+        </div>
+        <div className="form-group mb-4">
+          <button className="text-blue-500 hover:underline" onClick={toggleShowRegisterScreen}>
+            Вже є профіль? Увійдіть тут.
+          </button>
+        </div>
+        <div>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={handleButtonClick}
+            disabled={registrationRunning}
+          >
+            {registrationRunning ? 'Зачекайте...' : 'Зареєструватися'}
+          </button>
+          {errorMessage && (
+            <p className="text-red-500 error-message pt-4">{errorMessage}</p>
+          )}
+        </div>
+      </div >
     </div>
   );
 };

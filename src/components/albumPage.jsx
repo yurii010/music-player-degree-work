@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { AudioContext } from "../context/AudioContext";
 import Track from "../track/track";
 import axios from "axios";
-import secondsToMMSS from "../utils/secondsToMMSS";
+import secondsToMMSS from '../utils/secondsToTime';
 
 const AlbumPage = () => {
   const { activeAlbum, albumsSongs, setAlbumsSongs } = useContext(AudioContext);
@@ -27,19 +27,23 @@ const AlbumPage = () => {
   }, [activeAlbum, setAlbumsSongs]);
 
   return (
-    <div>
-      <div>
-        <img src={activeAlbum.album_photo} alt={activeAlbum.album_name} width="50" />
-        <span>{activeAlbum.album_name}</span>
-      </div>
-      <div>
-        <span>Кількість пісень: {songCount}</span><br />
-        <span>Тривалість: {totalDuration} seconds</span>
-      </div>
-      <div className="list">
-        {albumsSongs.map((track, index) => (
-          <Track key={index} {...track} playlistType="albumType"/>
-        ))}
+    <div className="bg-[#212121] h-full p-2 text-white">
+      <div className='bg-[#292929] rounded-2xl h-full p-2 flex flex-col'>
+        <div className="flex flex-row border-b-2 border-white m-3">
+          <img src={activeAlbum.album_photo} alt={activeAlbum.album_name} className="w-36" />
+          <div className="flex flex-row items-center justify-center m-3 gap-4">
+            <p className="text-4xl">{activeAlbum.album_name}</p>
+            <div>
+              <p>Кількість треків {songCount}</p>
+              <p>Час програвання {totalDuration}</p>
+            </div>
+          </div>
+        </div>
+        <div className='overflow-auto my-3'>
+          {albumsSongs.map((track, index) => (
+            <Track key={index} {...track} playlistType="albumType" />
+          ))}
+        </div>
       </div>
     </div>
   );

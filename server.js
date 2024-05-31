@@ -153,6 +153,15 @@ app.post('/removeFromFavorites', (req, res) => {
     });
 });
 
+app.post('/favoriteInfo', (req, res) => {
+    const uid = req.body.uid;
+    const get = 'SELECT * FROM favorite_lists WHERE uid = ?';
+    db.query(get, [uid], (err, data) => {
+        if (err) return res.json({ error: err.message });
+        return res.json(data);
+    });
+});
+
 // Playlist
 
 app.post('/getPlaylists', (req, res) => {
@@ -210,7 +219,7 @@ app.post('/addSongToPlaylist', (req, res) => {
     const checkIfExistsQuery = 'SELECT * FROM playlists_songs WHERE playlist_id = ? AND song_id = ?';
     db.query(checkIfExistsQuery, [playlist_id, song_id], (err, result) => {
         if (err) return res.json({ error: err.message });
-        if (result.length > 0) return res.json({ message: 'Song already exists in the playlist' });
+        if (result.length > 0) return res.json({ message: 'Пісня вже є в списку' });
         const insertQuery = 'INSERT INTO playlists_songs (playlist_id, song_id) VALUES (?, ?)';
         db.query(insertQuery, [playlist_id, song_id], (err, result) => {
             if (err) return res.json({ error: err.message });
