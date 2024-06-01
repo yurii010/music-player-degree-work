@@ -18,7 +18,24 @@ const AuthProvider = (props) => {
   const [userPlaylists, setUserPlaylists] = useState([]);
   const { myAuth, myFS } = useFirebaseContext();
 
-  // hook into Firebase Authentication
+  // if you need fix something or develop, you can comment this bottom
+  useEffect(() => {
+    if (myAuth) {
+      let unsubscribe = onAuthStateChanged(myAuth, (user) => {
+        if (user) {
+          setUser(user);
+          if (!sessionStorage.getItem('initialized')) {
+            logoutFunction();
+            sessionStorage.setItem('initialized', 'true');
+          }
+        }
+        setAuthLoading(false);
+      });
+      return unsubscribe;
+    }
+  }, [myAuth]);
+  // end
+
   useEffect(() => {
     if (myAuth) {
       let unsubscribe = onAuthStateChanged(myAuth, (user) => {
@@ -41,7 +58,7 @@ const AuthProvider = (props) => {
           docRef,
           (docSnap) => {
             let profileData = docSnap.data();
-            // console.log('Got user profile:', profileData, docSnap);
+            console.log('Got user profile:', profileData, docSnap);
             if (!profileData) {
               setAuthErrorMessages([
                 `No profile doc found in Firestore at: ${docRef.path}`,
@@ -82,7 +99,6 @@ const AuthProvider = (props) => {
   }, [user, setProfile, myFS]);
 
   /**
-   *
    * @param {string} email email address and "login ID" for the new account
    * @param {string} password password to use for the new account
    * @param {string} username optional display name for the new account
@@ -155,7 +171,7 @@ const AuthProvider = (props) => {
     try {
       setUser(null);
       await signOut(myAuth);
-      // console.log('Signed Out');
+      console.log('Signed Out');
       localStorage.removeItem('uid', user.uid)
       return true;
     } catch (ex) {
