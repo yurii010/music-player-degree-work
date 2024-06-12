@@ -30,7 +30,7 @@ const Favorite = () => {
         <div className="bg-[#212121] h-full p-2 text-white">
             <div className='bg-[#292929] rounded-2xl h-full p-2 flex flex-col'>
                 <div className="flex flex-row border-b-2 border-white m-3">
-                    <p className="text-3xl m-3">Ваш любимий список треків</p>
+                    <p className="text-3xl m-3">Ваш улюблений список треків</p>
                     {/* <div>
                         <p>Кількість треків {favorite.song_count}</p>
                         <p>Час програвання {secondsToMMSS(favorite.favorite_list_duration)}</p>

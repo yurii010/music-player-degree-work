@@ -9,7 +9,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const UserPlaylist = () => {
     const { activePlaylist, onChangeMenuItem, setOpenPlaylistEdit, playlistName, getPlaylistName, playlistCountAndDuration, setPlaylistCountAndDuration, songsPlaylist, setSongsPlaylist } = useContext(AudioContext);
 
-
     useEffect(() => {
         if (!activePlaylist) return;
         const fetchSongs = async () => {

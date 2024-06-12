@@ -1,6 +1,6 @@
+import { PlayArrow, Pause, SkipPrevious, SkipNext, VolumeUp, VolumeDown, Repeat, RepeatOne, Shuffle } from "@mui/icons-material";
 import { useContext, useEffect, useState } from 'react';
 import { AudioContext } from '../context/AudioContext';
-import { PlayArrow, Pause, SkipPrevious, SkipNext, VolumeUp, VolumeDown, Repeat, RepeatOne, Shuffle } from "@mui/icons-material";
 import ShuffleOnIcon from '@mui/icons-material/ShuffleOn';
 import { IconButton, Slider } from '@mui/material';
 import secondsToMMSS from '../utils/secondsToMMSS';
@@ -12,7 +12,7 @@ const TimeControls = () => {
     const formattedDuration = secondsToMMSS(currentTime);
     const sliderCurrentTime = song_duration ? Math.round((currentTime / song_duration) * 100) : 0;
     const songDuration = secondsToMMSS(song_duration);
-
+    
     const handleChangeCurrentTime = (_, value) => {
         const time = Math.round((value / 100) * song_duration);
         setCurrentTime(time);
@@ -20,26 +20,14 @@ const TimeControls = () => {
     };
 
     useEffect(() => {
-        const timeInterval = setInterval(() => {
-            setCurrentTime(audio.currentTime);
-        }, 1000);
-
-        return () => {
-            clearInterval(timeInterval);
-        };
+        const timeInterval = setInterval(() => { setCurrentTime(audio.currentTime) }, 1000);
+        return () => { clearInterval(timeInterval); };
     }, []);
 
     return (
         <div className='flex flex-row items-center space-x-2'>
             <p className='pr-2'>{formattedDuration}</p>
-            <Slider
-                step={1}
-                min={0}
-                max={100}
-                value={sliderCurrentTime}
-                onChange={handleChangeCurrentTime}
-                className='flex-grow'
-            />
+            <Slider step={1} min={0} max={100} value={sliderCurrentTime} onChange={handleChangeCurrentTime} className='flex-grow' />
             <p className='pl-2'>{songDuration}</p>
         </div>
     );
@@ -59,11 +47,7 @@ const LoudControls = () => {
     return (
         <div className='flex flex-row items-center space-x-2 mr-2'>
             <VolumeDown />
-            <Slider
-                value={valueLoud}
-                onChange={loudnessChange}
-                className='w-64'
-            />
+            <Slider value={valueLoud} onChange={loudnessChange} className='w-64' />
             <VolumeUp />
         </div>
     );
@@ -73,7 +57,6 @@ const Playbar = () => {
     const { currentTrack, isPlaying, handleToggleAudio, findAuthorById, onChangeMenuItem, playNextSong, playPreviousSong, toggleShuffle, shuffle, repeatOne, toggleRepeatOne } = useContext(AudioContext);
     const { song_id, song_name, song_author, author_id, song_image } = currentTrack;
     const isCurrentTrack = currentTrack.song_id === song_id;
-
     const handleAuthorClick = (author_id) => {
         findAuthorById(author_id);
         onChangeMenuItem('author');

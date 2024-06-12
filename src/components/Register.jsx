@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAuthContext } from '../firebase/authProvider';
 
 export const Register = ({ toggleShowRegisterScreen }) => {
-  const { register, authErrorMessages } = useAuthContext();
+  const { register } = useAuthContext();
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,7 +11,6 @@ export const Register = ({ toggleShowRegisterScreen }) => {
 
   const handleButtonClick = async () => {
     setRegistrationRunning(true);
-
     let theDisplayName = displayName;
     if (theDisplayName?.length <= 0) {
       theDisplayName = 'NO DISPLAY NAME PROVIDED';

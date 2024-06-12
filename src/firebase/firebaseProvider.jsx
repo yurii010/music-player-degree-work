@@ -10,18 +10,14 @@ const FirebaseProvider = (props) => {
   const myApp = initializeApp(myFirebaseConfig);
   const myAuth = getAuth(myApp);
   const myFS = getFirestore(myApp);
-
   const [firebaseInitializing, setFirebaseInitializing] = useState(true);
+  useEffect(() => { setFirebaseInitializing(false); }, []);
 
-  useEffect(() => {
-    setFirebaseInitializing(false);
-  }, []);
-  
   if (firebaseInitializing) {
     return <h1>Loading...</h1>;
   }
 
-  const value = { myApp, myAuth, myFS, };
+  const value = { myApp, myAuth, myFS };
   const { children } = props;
   return (
     <FirebaseContext.Provider value={value}>

@@ -30,17 +30,13 @@ const Menu = () => {
   return (
     <div className='flex flex-col h-screen w-60 bg-[#212121] text-white'>
       <div className='h-32 w-auto bg-[#292929] rounded-2xl flex items-center justify-center m-2 p-2'>
-        <img
-          onClick={() => onChangeMenuItem('profile')}
-          src={userPhoto}
-          className='m-auto max-h-full max-w-full object-contain'
-        />
+        <img onClick={() => onChangeMenuItem('profile')} src={userPhoto} className='m-auto max-h-full max-w-full object-contain' />
       </div>
       <div className='h-full w-auto bg-[#292929] rounded-2xl flex flex-col m-2 p-2 gap-y-1'>
         <p onClick={() => onChangeMenuItem('golovna')}>Головна сторінка<HouseIcon /></p>
         <p onClick={() => onChangeMenuItem('search')}>Пошук<SearchIcon /></p>
         <div onClick={() => onChangeMenuItem('favorite')}>
-          <p>Любимий список <FavoriteIcon /></p>
+          <p>Улюблений список <FavoriteIcon /></p>
         </div>
         <div onClick={handleCreatePlaylist}>
           <p>Створити плейлист <PlaylistAddIcon /></p>

@@ -5,11 +5,9 @@ import { useFirebaseContext } from './firebaseProvider';
 import axios from 'axios';
 
 export const AuthContext = createContext({});
-
 const PROFILE_COLLECTION = 'users';
 
 const AuthProvider = (props) => {
-
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
@@ -18,7 +16,6 @@ const AuthProvider = (props) => {
   const [userPlaylists, setUserPlaylists] = useState([]);
   const { myAuth, myFS } = useFirebaseContext();
 
-  // if you need fix something or develop, you can comment this bottom
   useEffect(() => {
     if (myAuth) {
       let unsubscribe = onAuthStateChanged(myAuth, (user) => {
@@ -34,7 +31,6 @@ const AuthProvider = (props) => {
       return unsubscribe;
     }
   }, [myAuth]);
-  // end
 
   useEffect(() => {
     if (myAuth) {
@@ -48,46 +44,31 @@ const AuthProvider = (props) => {
     }
   }, [myAuth]);
 
-  // listen to the user profile (FS User doc)
   useEffect(() => {
     let unsubscribe = null;
     const listenToUserDoc = async (uid) => {
       try {
         let docRef = doc(myFS, PROFILE_COLLECTION, uid);
-        unsubscribe = await onSnapshot(
-          docRef,
+        unsubscribe = await onSnapshot(docRef,
           (docSnap) => {
             let profileData = docSnap.data();
             console.log('Got user profile:', profileData, docSnap);
-            if (!profileData) {
-              setAuthErrorMessages([
-                `No profile doc found in Firestore at: ${docRef.path}`,
-              ]);
-            }
+            if (!profileData) { setAuthErrorMessages([`No profile doc found in Firestore at: ${docRef.path}`]); }
             setProfile(profileData);
           },
           (firestoreErr) => {
-            console.error(
-              `onSnapshot() callback failed with: ${firestoreErr.message}`,
-              firestoreErr
-            );
-            setAuthErrorMessages([
-              firestoreErr.message,
-              'Have you initialized your Firestore database?',
-            ]);
+            console.error(`onSnapshot() callback failed with: ${firestoreErr.message}`, firestoreErr);
+            setAuthErrorMessages([firestoreErr.message, 'Have you initialized your Firestore database?']);
           }
         );
       } catch (ex) {
-        console.error(
-          `useEffect() calling onSnapshot() failed with: ${ex.message}`
-        );
+        console.error(`useEffect() calling onSnapshot() failed with: ${ex.message}`);
         setAuthErrorMessages([ex.message]);
       }
     };
 
     if (user?.uid) {
       listenToUserDoc(user.uid);
-
       return () => {
         unsubscribe && unsubscribe();
       };
@@ -99,64 +80,43 @@ const AuthProvider = (props) => {
   }, [user, setProfile, myFS]);
 
   /**
-   * @param {string} email email address and "login ID" for the new account
-   * @param {string} password password to use for the new account
-   * @param {string} username optional display name for the new account
-   * @returns {boolean} true if the account is created, false otherwise
+   * @param {string} 
+   * @param {string} 
+   * @param {string} 
+   * @returns {boolean} 
    */
   const registerFunction = async (email, password, username = '') => {
     let userCredential;
     try {
-      userCredential = await createUserWithEmailAndPassword(
-        myAuth,
-        email,
-        password
-      );
+      userCredential = await createUserWithEmailAndPassword(myAuth, email, password);
     } catch (ex) {
-      setAuthErrorMessages([
-        console.log(ex.message)
-      ]);
+      setAuthErrorMessages([console.log(ex.message)]);
       return false;
     }
 
     try {
       let user = userCredential.user;
       let userDocRef = doc(myFS, 'users', user.uid);
-      let userDocData = {
-        uid: user.uid,
-        email: email,
-        username: username,
-        dateCreated: serverTimestamp(),
-      };
+      let userDocData = { uid: user.uid, email: email, username: username, dateCreated: serverTimestamp(), };
       localStorage.setItem('uid', user.uid);
       await setDoc(userDocRef, userDocData);
       return true;
     } catch (ex) {
       console.error(`registerFunction() failed with: ${ex.message}`);
-      setAuthErrorMessages([
-        ex.message,
-        'Did you enable the Firestore Database in your Firebase project?',
-      ]);
+      setAuthErrorMessages([ex.message, 'Did you enable the Firestore Database in your Firebase project?',]);
       return false;
     }
   };
 
   const loginFunction = async (email, password) => {
     try {
-      let userCredential = await signInWithEmailAndPassword(
-        myAuth,
-        email,
-        password
-      );
-
+      let userCredential = await signInWithEmailAndPassword(myAuth, email, password);
       let user = userCredential.user;
       if (!user?.uid) {
         let msg = `No UID found after signIn!`;
         console.error(msg);
       }
-      if (user) {
-        localStorage.setItem('uid', user.uid)
-      }
+      if (user) { localStorage.setItem('uid', user.uid) }
       setUser(user);
       return true;
     } catch (ex) {
@@ -172,7 +132,8 @@ const AuthProvider = (props) => {
       setUser(null);
       await signOut(myAuth);
       console.log('Signed Out');
-      localStorage.removeItem('uid', user.uid)
+      localStorage.removeItem('uid', user.uid);
+      window.location.reload();
       return true;
     } catch (ex) {
       console.error(ex);

@@ -2,7 +2,6 @@ import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
 export const AudioContext = createContext({});
-
 const audio = new Audio();
 
 const AudioProvider = ({ children }) => {
@@ -77,9 +76,7 @@ const AudioProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    if (currentTrack) {
-      setPlayedSongsHistory(prevHistory => [...prevHistory, currentTrack.song_id]);
-    }
+    if (currentTrack) { setPlayedSongsHistory(prevHistory => [...prevHistory, currentTrack.song_id]); }
   }, [currentTrack]);
 
   useEffect(() => {
@@ -92,7 +89,6 @@ const AudioProvider = ({ children }) => {
       setRepeatOne(false);
     }
   }, [repeatOne, shuffle, setShuffle, setRepeatOne]);
-  
 
   const handleToggleAudio = (track, type) => {
     if (currentTrack.song_id !== track.song_id) {
@@ -187,9 +183,7 @@ const AudioProvider = ({ children }) => {
 
 
   const toggleShuffle = () => {
-    if (!shuffle) {
-      setPlayedSongsHistory([]);
-    }
+    if (!shuffle) { setPlayedSongsHistory([]) }
     setShuffle(!shuffle);
   };
 
@@ -198,16 +192,12 @@ const AudioProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (shuffle && currentTrack) {
-      setPlayedSongsHistory(prevHistory => [...prevHistory, currentTrack.song_id]);
-    }
+    if (shuffle && currentTrack) { setPlayedSongsHistory(prevHistory => [...prevHistory, currentTrack.song_id]) }
   }, [currentTrack, shuffle]);
 
   useEffect(() => {
     audio.addEventListener('ended', playNextSong);
-    return () => {
-      audio.removeEventListener('ended', playNextSong);
-    };
+    return () => { audio.removeEventListener('ended', playNextSong) };
   }, [currentTrack, activeListSong, shuffle]);
 
   const removeSongFromPlaylist = (songId) => {
@@ -236,7 +226,6 @@ const AudioProvider = ({ children }) => {
 
   const findAlbumById = (albumId) => {
     const foundAlbum = albums.find(album => album.album_id === albumId);
-
     if (foundAlbum) {
       setActiveAlbum(foundAlbum);
     } else {
@@ -246,7 +235,6 @@ const AudioProvider = ({ children }) => {
 
   const findAuthorById = (authorId) => {
     const foundAuthor = authors.find(author => author.author_id === authorId);
-
     if (foundAuthor) {
       setActiveAuthor(foundAuthor);
     } else {
@@ -317,10 +305,8 @@ const AudioProvider = ({ children }) => {
     onChangeDefPlaylist,
     playNextSong,
     playPreviousSong,
-
     repeatOne, toggleRepeatOne,
     shuffle, toggleShuffle,
-
     songs,
     albumsSongs, setAlbumsSongs,
     authorsSongs, setAuthorsSongs,

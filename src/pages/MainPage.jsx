@@ -20,9 +20,7 @@ const MainPage = () => {
     const { profile } = useAuthContext();
 
     if (!profile) {
-        return (
-            <Navigate to="/" />
-        );
+        return (<Navigate to="/" />);
     }
 
     useEffect(() => {
