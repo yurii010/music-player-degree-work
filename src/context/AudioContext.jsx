@@ -181,7 +181,6 @@ const AudioProvider = ({ children }) => {
     }
   };
 
-
   const toggleShuffle = () => {
     if (!shuffle) { setPlayedSongsHistory([]) }
     setShuffle(!shuffle);

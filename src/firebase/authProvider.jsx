@@ -96,15 +96,25 @@ const AuthProvider = (props) => {
 
     try {
       let user = userCredential.user;
+      let uid = user.uid;
       let userDocRef = doc(myFS, 'users', user.uid);
       let userDocData = { uid: user.uid, email: email, username: username, dateCreated: serverTimestamp(), };
       localStorage.setItem('uid', user.uid);
+      await addUser(uid);
       await setDoc(userDocRef, userDocData);
       return true;
     } catch (ex) {
       console.error(`registerFunction() failed with: ${ex.message}`);
       setAuthErrorMessages([ex.message, 'Did you enable the Firestore Database in your Firebase project?',]);
       return false;
+    }
+  };
+
+  const addUser = async (uid) => {
+    try {
+      await axios.post(`http://localhost:8081/createUser`, { uid });
+    } catch (error) {
+      console.error('Error adding user to another database:', error);
     }
   };
 

@@ -87,6 +87,19 @@ app.post('/deleteAvatar', async (req, res) => {
     });
 });
 
+app.post('/createUser', (req, res) => {
+    const uid = req.body.uid;
+    const sqlInsertUser = 'INSERT INTO users (uid, uphoto) VALUES (?, "")';
+    const sqlInsertFavoriteList = 'INSERT INTO favorite_lists (uid, song_count, favorite_list_duration) VALUES (?, 0, 0)';
+    db.query(sqlInsertUser, [uid], (err) => {
+        if (err) return res.json({ error: err.message });
+        db.query(sqlInsertFavoriteList, [uid], (err) => {
+            if (err) return res.json({ error: err.message });
+            return res.status(201).json();
+        });
+    });
+});
+
 app.post('/loadAvatar', async (req, res) => {
     const uid = req.body.uid;
     const sql = 'SELECT uphoto FROM users WHERE uid = ?';
